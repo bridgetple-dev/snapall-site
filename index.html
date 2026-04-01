@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SnapAll — Screenshot All Tabs to PDF & PowerPoint</title>
+<meta name="description" content="Capture all open browser tabs in one click. Export as PDF, PowerPoint slides, or images. Free Chrome extension.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue-900:#0a1628;--blue-800:#0f2040;--blue-700:#152d5a;
+  --blue-500:#2563eb;--blue-400:#3b82f6;--blue-300:#60a5fa;
+  --cyan-400:#22d3ee;--green-400:#00e641;
+  --gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-500:#64748b;
+  --white:#ffffff;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--blue-900);color:var(--white);overflow-x:hidden}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40%;left:-20%;width:140%;height:140%;background:radial-gradient(ellipse at 30% 20%,rgba(37,99,235,0.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(34,211,238,0.08) 0%,transparent 50%);pointer-events:none}
+
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);border-radius:999px;padding:6px 16px;font-size:13px;color:var(--blue-300);margin-bottom:1.5rem;animation:fadeIn .6s ease}
+.badge-dot{width:6px;height:6px;background:var(--green-400);border-radius:50%;animation:pulse 2s infinite}
+
+h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:700;line-height:1.15;max-width:720px;margin-bottom:1.25rem;animation:fadeUp .7s ease}
+h1 span{background:linear-gradient(135deg,var(--blue-400),var(--cyan-400));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.subtitle{font-size:clamp(1rem,2vw,1.25rem);color:var(--gray-400);max-width:540px;line-height:1.6;margin-bottom:2.5rem;animation:fadeUp .8s ease}
+
+.cta-group{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp .9s ease}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .15s,box-shadow .15s;cursor:pointer;border:none;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--blue-500),var(--blue-400));color:var(--white);box-shadow:0 4px 24px rgba(37,99,235,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 32px rgba(37,99,235,0.4)}
+.btn-secondary{background:rgba(255,255,255,0.06);color:var(--gray-200);border:1px solid rgba(255,255,255,0.1)}
+.btn-secondary:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px)}
+.btn svg{width:18px;height:18px}
+
+.price-note{margin-top:1rem;font-size:13px;color:var(--gray-500);animation:fadeUp 1s ease}
+
+/* Features */
+.features{padding:6rem 1.5rem;max-width:960px;margin:0 auto}
+.features h2{text-align:center;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;margin-bottom:3rem}
+.features h2 span{color:var(--blue-400)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.75rem;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(37,99,235,0.3);transform:translateY(-3px)}
+.card-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.card-icon.blue{background:rgba(96,165,250,0.12)}
+.card h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.card p{font-size:14px;color:var(--gray-400);line-height:1.6}
+
+/* Pricing */
+.pricing{padding:5rem 1.5rem;text-align:center}
+.pricing h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;margin-bottom:2.5rem}
+.pricing-cards{display:flex;gap:20px;max-width:680px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.p-card{flex:1;min-width:280px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:2rem;text-align:left}
+.p-card.pro{border-color:rgba(37,99,235,0.4);background:rgba(37,99,235,0.06)}
+.p-card .tier{font-size:13px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.p-card.pro .tier{color:var(--blue-400)}
+.p-card .price{font-size:2rem;font-weight:700;margin-bottom:4px}
+.p-card .price-sub{font-size:13px;color:var(--gray-500);margin-bottom:1.25rem}
+.p-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.p-card li{font-size:14px;color:var(--gray-400);display:flex;align-items:flex-start;gap:8px}
+.p-card li::before{content:'✓';color:var(--green-400);font-weight:700;flex-shrink:0}
+.p-card.pro li::before{color:var(--blue-400)}
+
+/* Footer */
+footer{text-align:center;padding:3rem 1.5rem;border-top:1px solid rgba(255,255,255,0.05);font-size:13px;color:var(--gray-500)}
+footer a{color:var(--gray-400);text-decoration:none}
+
+/* Privacy */
+.privacy{max-width:640px;margin:0 auto;padding:3rem 1.5rem}
+.privacy h2{font-size:1.3rem;font-weight:600;margin-bottom:1rem}
+.privacy p{font-size:14px;color:var(--gray-400);line-height:1.7}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:1fr}
+  .pricing-cards{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="badge"><span class="badge-dot"></span> Free Chrome Extension</div>
+  <h1>Screenshot all your tabs <span>in one click</span></h1>
+  <p class="subtitle">Stop screenshotting tabs one by one. SnapAll captures every open tab and exports them as PDF, PowerPoint, or images — instantly.</p>
+  <div class="cta-group">
+    <a href="#" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+      Add to Chrome — Free
+    </a>
+    <a href="#pricing" class="btn btn-secondary">See pricing</a>
+  </div>
+  <p class="price-note">Free for 10 tabs · Pro just $4.99 one-time</p>
+</section>
+
+<section class="features">
+  <h2>Everything you need, <span>nothing you don't</span></h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="3"/><circle cx="12" cy="12" r="3.5"/><circle cx="12" cy="12" r="1.2" fill="#60a5fa" stroke="none"/></svg></div>
+      <h3>Batch capture</h3>
+      <p>Select the tabs you want — or capture all of them. One click, done.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
+      <h3>Export to PDF</h3>
+      <p>All screenshots merged into a single PDF. Native resolution, pixel-perfect.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="16" height="14" rx="2"/><path d="M22 7v10a2 2 0 0 1-2 2"/><path d="M18 3v0a2 2 0 0 1 2 2"/><line x1="7" y1="10" x2="13" y2="10"/><line x1="7" y1="14" x2="11" y2="14"/></svg></div>
+      <h3>Export to PowerPoint</h3>
+      <p>One tab = one slide. Ready for your next meeting. Pro feature.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5" fill="#60a5fa" stroke="none"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <h3>Image ZIP</h3>
+      <p>Individual screenshots as separate files. Perfect for docs and reports.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+      <h3>Works on any tab</h3>
+      <p>Web pages, dashboards, internal tools — if you can see it, SnapAll captures it.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon blue"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1" fill="#60a5fa" stroke="none"/></svg></div>
+      <h3>100% private</h3>
+      <p>Everything stays on your device. Zero tracking, zero data collection, zero cloud.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <h2>Simple pricing</h2>
+  <div class="pricing-cards">
+    <div class="p-card">
+      <div class="tier">Free</div>
+      <div class="price">$0</div>
+      <div class="price-sub">Forever free</div>
+      <ul>
+        <li>Up to 10 tabs per capture</li>
+        <li>PDF export (native resolution)</li>
+        <li>Image ZIP export</li>
+        <li>Tab select/deselect UI</li>
+        <li>No account required</li>
+      </ul>
+    </div>
+    <div class="p-card pro">
+      <div class="tier">Pro</div>
+      <div class="price">$4.99</div>
+      <div class="price-sub">One-time payment · Lifetime access</div>
+      <ul>
+        <li>Unlimited tabs per capture</li>
+        <li>PowerPoint export (1 tab = 1 slide)</li>
+        <li>PDF page size options (A4, Letter, etc.)</li>
+        <li>URL & timestamp on each page</li>
+        <li>Reduce file size for email</li>
+        <li>All future updates included</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="privacy">
+  <h2>Privacy</h2>
+  <p>SnapAll processes everything locally on your device. We never collect, store, or transmit your screenshots or browsing data. No analytics, no tracking pixels, no cloud uploads. Payments are handled securely through our payment provider. The only data we receive is your email address when you purchase Pro.</p>
+</section>
+
+<footer>
+  <p>© 2026 SnapAll · <a href="/cdn-cgi/l/email-protection#10636560607f626450637e7160717c7c3e716060">C
